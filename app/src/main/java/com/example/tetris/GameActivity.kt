@@ -9,6 +9,7 @@ import com.example.tetris.databinding.ActivityGameBinding
 import com.example.tetris.databinding.ActivityMainBinding
 
 class GameActivity : AppCompatActivity() {
+    private var appPreferences: AppPreferences? = null
     private lateinit var binding: ActivityGameBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -16,5 +17,17 @@ class GameActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(binding.root)
 
+        appPreferences = AppPreferences(this)
+
+
+        updateHighScore()
+        updateCurrentScore()
+    }
+
+    private fun updateHighScore(){
+        binding.tvHighScore.text = appPreferences?.getHighScore().toString()
+    }
+    private fun updateCurrentScore(){
+        binding.tvCurrentScore.text = "0"
     }
 }
