@@ -31,6 +31,7 @@ class MainActivity : AppCompatActivity() {
                 preferences.clearHighScore()
                 Snackbar.make(binding.root, "Score was successfully reset", Snackbar.LENGTH_SHORT).show()
             }
+            tvHighScore.text = "Highest Score: ${preferences.getHighScore().toString()}"
 
         }
     }

@@ -10,31 +10,38 @@ import com.example.tetris.constants.FieldConstants;
 import java.util.Random;
 
 public class Block {
-
     private final int shapeIndex;
     private int frameNumber;
     private final BlockColor color;
     private Point position;
 
-    private Block(int shapeIndex, BlockColor color) {
+    private Block(int shapeIndex, BlockColor blockColor) {
         this.frameNumber = 0;
         this.shapeIndex = shapeIndex;
-        this.color = color;
+        this.color = blockColor;
         this.position = new Point(FieldConstants.COLUMN_COUNT.getValue() / 2, 0);
+        // помещаем по горизонтали в центр элемент, а по вертикали в самый верх
     }
 
     public static Block createBlock() {
         Random random = new Random();
-        int shapeIndex = random.nextInt(Shape.values().length);
-        BlockColor blockColor = BlockColor.values()[random.nextInt(BlockColor.values().length)];
+        int shapeIndex = random.nextInt(Shape.values().length); // получаем количество возможных вариантов enum класса Shape
+        BlockColor blockColor = BlockColor.values()
+                [random.nextInt(BlockColor.values().length)];
         Block block = new Block(shapeIndex, blockColor);
-        block.position.x = block.position.x - Shape.values()[shapeIndex].getStartPosition();
+        block.position.x = block.position.x - Shape.values()
+                [shapeIndex].getStartPosition();
         return block;
     }
 
     public final void setState(int frame, Point position) {
         this.frameNumber = frame;
         this.position = position;
+    }
+
+    @NonNull
+    public final byte[][] getShape(int frameNumber) {
+        return Shape.values()[shapeIndex].getFrame(frameNumber).as2dByteArray();
     }
 
     public Point getPosition() {
@@ -46,29 +53,25 @@ public class Block {
     }
 
     public int getFrameNumber() {
-        return this.frameNumber;
+        return frameNumber;
     }
 
-    public static int getColor(byte value){
-        for(BlockColor color : BlockColor.values()){
-            if(value == color.byteValue){
+    public static int getColor(byte value) {
+        // проходимся по перечислению цветов и если байт совпадет с аргументом - возвращаем rgb
+        for (BlockColor color : BlockColor.values()) {
+            if (value == color.byteValue) {
                 return color.rgbValue;
             }
         }
         return -1;
     }
 
-    public int getColor(){
+    public int getColor() {
         return color.rgbValue;
     }
 
-    public byte getStaticValue(){
+    public byte getStaticValue() {
         return color.byteValue;
-    }
-
-    @NonNull
-    public final byte[][] getShape(int frameNumber) {
-        return Shape.values()[shapeIndex].getFrame(frameNumber).as2dByteArray();
     }
 
     public enum BlockColor {
